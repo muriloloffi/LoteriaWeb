@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<?php
+  $destroySessionFlag = filter_input(INPUT_POST, 'destroySession');
+  if ($destroySessionFlag == 1) { //usa a flag do botão de logout
+    unset($_COOKIE['login']); //exclui cookie de sessão
+  }
+  $login_cookie = $_COOKIE['login'];
+    if(isset($login_cookie)){
+      echo"Bem-Vindo, $login_cookie <br>";
+      echo"As informações do <font color='red'>BASE DE FILMES DA INTERNET</font> já podem ser acessadas por você <br/><br/>";
+      mysql_connect('localhost','root','') or
+        die ("Não foi possível conectar: ".mysql_error());
+      mysql_select_db('prova');
+      $consulta = mysql_query("SELECT * FROM filmes");
+      while ($row = mysql_fetch_array($consulta, MYSQL_BOTH)) {
+        printf ("ID: %s  Nome: %s Diretor: %s Ano: %s Sinopse: %s  <br/><br/>", $row[0], $row["titulo"], $row["diretor"], $row["ano"], $row["sinopse"]);
+      }
+      mysql_free_result($consulta);
+      echo"<form action='' method='POST'>"; //Botão de logout apenas aparece quando já se está logado
+      echo"  <input type='hidden' name='destroySession' value='1'>"; //seta uma flag de logout
+      echo"  <input type='submit' value='DESCONECTAR' />"; //botão
+      echo"</form>";
+
+    }else{
+      echo"Bem-Vindo, convidado <br>";
+      echo"Faça login ou cadastre-se para acessar as informações do <font color='red'>BASE DE FILMES DA INTERNET</font> por você";
+      echo"<br><a href='login.html'>Faça Login</a> Para ler o conteúdo";
+    }
+?>
+<html lang="pt-br" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/style.css">
+    <title>Bisho4bit</title>
+  </head>
+  <body>
+
+  </body>
+</html>
